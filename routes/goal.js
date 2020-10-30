@@ -1,15 +1,15 @@
 const express = require('express');
 const router = express.Router();
 
-const {createGoal, getGoalbById, getGoal, getAllGoals, updateGoal, removeGoal} = require('../controllers/goal');
+const {createGoal, getGoalById, getGoal, getAllGoals, updateGoal, removeGoal} = require('../controllers/goal');
 
 //defining url/:id id as goalId
-router.param('goalId', getGoalbById);
+router.param('goalId', getGoalById);
 
 //to create goal
 router.post("/goal/create",createGoal);
 
-//to check goal his profile he should be signed in as well as authenticated
+//to check a goal
 router.get('/goal/:goalId', getGoal);
 
 //to get all goals

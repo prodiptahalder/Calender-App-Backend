@@ -1,15 +1,15 @@
 const express = require('express');
 const router = express.Router();
 
-const {createNews, getNewsbById, getNews, getAllNewss, updateNews, removeNews} = require('../controllers/news');
+const {createNews, getNewsById, getNews, getAllNewss, updateNews, removeNews} = require('../controllers/news');
 
 //defining url/:id id as newsId
-router.param('newsId', getNewsbById);
+router.param('newsId', getNewsById);
 
 //to create news
 router.post("/news/create",createNews);
 
-//to check news his profile he should be signed in as well as authenticated
+//to check a news
 router.get('/news/:newsId',getNews);
 
 //to get all newss

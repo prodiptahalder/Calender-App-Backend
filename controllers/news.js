@@ -1,6 +1,6 @@
 const News = require('../models/news');
 
-exports.getNewsbById = (req,res,next,id)=>{
+exports.getNewsById = (req,res,next,id)=>{
     News.findById(id).exec((err,news)=>{ //always db return 2 things err or news
         if(err || !news){
             return res.status(400).json({
@@ -23,7 +23,11 @@ exports.createNews = (req,res) => {
             });
         }
         res.json({
-            name:news.name
+            title:news.title,
+            author: news.author,
+            source: news.source,
+            authorImage: news.authorImage,
+            content: news.content
         });
     });
 }

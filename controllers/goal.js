@@ -1,6 +1,6 @@
 const Goal = require('../models/goal');
 
-exports.getGoalbById = (req,res,next,id)=>{
+exports.getGoalById = (req,res,next,id)=>{
     Goal.findById(id).exec((err,goal)=>{ //always db return 2 things err or goal
         if(err || !goal){
             return res.status(400).json({

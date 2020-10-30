@@ -16,6 +16,20 @@ exports.getUserById = (req,res,next,id)=>{
         path: 'notes',
         model: 'note'
     })
+    .populate({
+        path: 'tasks',
+        model: 'task',
+        populate: [
+            {
+                path: 'subtasks',
+                model: 'task'
+            },
+            {
+                path: 'notes',
+                model: 'note'
+            }
+        ]
+    })
     .exec((err,user)=>{ //always db return 2 things err or user
         if(err || !user){
             return res.status(400).json({
@@ -111,6 +125,102 @@ exports.addNote = (req,res) => {
         }
         notes.push(note);
         req.profile.notes = notes;
+        User.findByIdAndUpdate(
+            {_id: req.profile._id},
+            {$set: req.profile}, //updates everything in the body
+            {new: true, useFindandModify: false},
+            (err,user)=>{
+                if(err || !user)
+                {
+                    return res.status(400).json({
+                        error:"User Not authorised to update this user"
+                    })
+                }
+                //since we are getting an user here we will update the user not req.profile
+                user.salt = undefined;
+                user.encry_password = undefined;
+                res.json(user);
+            }
+        )
+    });
+}
+
+exports.addKeyword = (req,res) => {
+    var keywords = req.profile.keywords;
+    const keyword = new Keyword(req.body);
+    keyword.save((err,keyword)=>{ //gives back two param, error and keyword
+        if(err){
+            return res.status(400).json({
+                //passing this json to craft a error mesg in front end
+                err: "Not able to save keyword in DB"
+            });
+        }
+        keywords.push(keyword);
+        req.profile.keywords = keywords;
+        User.findByIdAndUpdate(
+            {_id: req.profile._id},
+            {$set: req.profile}, //updates everything in the body
+            {new: true, useFindandModify: false},
+            (err,user)=>{
+                if(err || !user)
+                {
+                    return res.status(400).json({
+                        error:"User Not authorised to update this user"
+                    })
+                }
+                //since we are getting an user here we will update the user not req.profile
+                user.salt = undefined;
+                user.encry_password = undefined;
+                res.json(user);
+            }
+        )
+    });
+}
+
+exports.addTask = (req,res) => {
+    var tasks = req.profile.tasks;
+    const task = new Task(req.body);
+    task.save((err,task)=>{ //gives back two param, error and task
+        if(err){
+            return res.status(400).json({
+                //passing this json to craft a error mesg in front end
+                err: "Not able to save task in DB"
+            });
+        }
+        tasks.push(task);
+        req.profile.tasks = tasks;
+        User.findByIdAndUpdate(
+            {_id: req.profile._id},
+            {$set: req.profile}, //updates everything in the body
+            {new: true, useFindandModify: false},
+            (err,user)=>{
+                if(err || !user)
+                {
+                    return res.status(400).json({
+                        error:"User Not authorised to update this user"
+                    })
+                }
+                //since we are getting an user here we will update the user not req.profile
+                user.salt = undefined;
+                user.encry_password = undefined;
+                res.json(user);
+            }
+        )
+    });
+}
+
+exports.addReminder = (req,res) => {
+    var reminders = req.profile.reminders;
+    const reminder = new Reminder(req.body);
+    reminder.save((err,reminder)=>{ //gives back two param, error and reminder
+        if(err){
+            return res.status(400).json({
+                //passing this json to craft a error mesg in front end
+                err: "Not able to save reminder in DB"
+            });
+        }
+        reminders.push(reminder);
+        req.profile.reminders = reminders;
         User.findByIdAndUpdate(
             {_id: req.profile._id},
             {$set: req.profile}, //updates everything in the body

@@ -1,6 +1,6 @@
 const Note = require('../models/note');
 
-exports.getNotebById = (req,res,next,id)=>{
+exports.getNoteById = (req,res,next,id)=>{
     Note.findById(id).exec((err,note)=>{ //always db return 2 things err or note
         if(err || !note){
             return res.status(400).json({

@@ -1,6 +1,6 @@
 const Keyword = require('../models/keyword');
 
-exports.getKeywordbById = (req,res,next,id)=>{
+exports.getKeywordById = (req,res,next,id)=>{
     Keyword.findById(id).exec((err,keyword)=>{ //always db return 2 things err or keyword
         if(err || !keyword){
             return res.status(400).json({

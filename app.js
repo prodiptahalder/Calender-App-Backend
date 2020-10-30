@@ -14,6 +14,8 @@ const keywordRoutes = require('./routes/keyword');
 const goalRoutes = require('./routes/goal');
 const newsRoutes = require('./routes/news');
 const noteRoutes = require('./routes/note');
+const taskRoutes = require('./routes/task');
+const reminderRoutes = require('./routes/reminder');
 
 //Connecting Mongoose-mongodb
 mongoose.connect(process.env.DATABASE,{
@@ -33,12 +35,14 @@ app.use(cookieParser());
 app.use(cors());
 
 //My routes
-app.use("/api",authRoutes);
+app.use("/api", authRoutes);
 app.use("/api", userRoutes);
 app.use("/api", keywordRoutes);
 app.use("/api", goalRoutes);
-app.use("/api",newsRoutes);
-app.use("/api",noteRoutes);
+app.use("/api", newsRoutes);
+app.use("/api", noteRoutes);
+app.use("/api", taskRoutes);
+app.use("/api", reminderRoutes);
 
 
 //Connecting the app

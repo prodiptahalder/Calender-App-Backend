@@ -34,6 +34,18 @@ const userSchema = new mongoose.Schema({
           ref: 'note'
         },
       ],
+    tasks: [
+          {
+              type: mongoose.Types.ObjectId,
+              ref: 'task'
+          },
+      ],
+    reminders: [
+        {
+            type: mongoose.Types.ObjectId,
+            ref: 'reminder'
+        }
+    ],
     doodle: {
         type: Boolean,
       },
@@ -112,4 +124,4 @@ userSchema.virtual("password")
 
 
 //throw mongoose model("Name we want to call", Defined schema name)
-module.exports = mongoose.model("User",userSchema)
+module.exports = mongoose.model("user",userSchema)

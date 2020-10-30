@@ -1,15 +1,15 @@
 const express = require('express');
 const router = express.Router();
 
-const {createKeyword, getKeywordbById, getKeyword, getAllKeywords, updateKeyword, removeKeyword} = require('../controllers/keyword');
+const {createKeyword, getKeywordById, getKeyword, getAllKeywords, updateKeyword, removeKeyword} = require('../controllers/keyword');
 
 //defining url/:id id as keywordId
-router.param('keywordId', getKeywordbById);
+router.param('keywordId', getKeywordById);
 
 //to create keyword
 router.post("/keyword/create",createKeyword);
 
-//to check keyword his profile he should be signed in as well as authenticated
+//to check a keyword
 router.get('/keyword/:keywordId',getKeyword);
 
 //to get all keywords

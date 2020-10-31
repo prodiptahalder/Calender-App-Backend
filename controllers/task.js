@@ -2,14 +2,30 @@ const Task = require('../models/task');
 
 exports.getTaskById = (req,res,next,id)=>{
     Task.findById(id)
-    .populate({
+    .populate(
+        {
         path: 'notes',
         model: 'note'
-    })
-    .populate({
+        }
+    )
+    .populate(
+        {
         path: 'subtasks',
         model: 'task'
-    })
+        }
+    )
+    .populate(
+        {
+            path: 'invite',
+            model: 'user'
+        }
+    )
+    .populate(
+        {
+            path: 'owner',
+            model: 'user'
+        }
+    )
     .exec((err,task)=>{ //always db return 2 things err or task
         if(err || !task){
             return res.status(400).json({

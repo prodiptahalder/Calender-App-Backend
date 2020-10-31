@@ -1,7 +1,20 @@
 const Goal = require('../models/goal');
 
 exports.getGoalById = (req,res,next,id)=>{
-    Goal.findById(id).exec((err,goal)=>{ //always db return 2 things err or goal
+    Goal.findById(id)
+    .populate(
+        {
+            path: 'invite',
+            model: 'user'
+        }
+    )
+    .populate(
+        {
+            path: 'owner',
+            model: 'user'
+        }
+    )
+    .exec((err,goal)=>{ //always db return 2 things err or goal
         if(err || !goal){
             return res.status(400).json({
                 error: "No goal was found in DB"

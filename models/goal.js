@@ -7,11 +7,11 @@ const GoalSchema = new mongoose.Schema({
     },
     startDate: {
         type: Date,
-        required: true
+        // required: true
     },
     endDate: {
         type: Date,
-        required: true
+        // required: true
     },
     quote: {
         type: String,
@@ -22,13 +22,27 @@ const GoalSchema = new mongoose.Schema({
         // required: true
     },
     priority: {
-        type: Number,
+        type: String,
+        enum: ["High", "Medium", "Low"],
         required: true
     },
     recurrant: {
         type: Boolean,
+    },
+    recurrantPeriod: {
+        type: String,
+        enum: ["Daily", "Weekly", "Monthly", "None"]
+    },
+    invite:[
+        {
+            type: mongoose.Types.ObjectId,
+            ref: 'user'
+        }
+    ],
+    owner:{
+        type: mongoose.Types.ObjectId,
+        ref: 'user'
     }
-    
 },
 {
     timestamps:true //this timestamp records the time of entry in the db

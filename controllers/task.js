@@ -40,7 +40,9 @@ exports.createTask = (req,res) => {
             status: task.status,
             subtasks: task.subtasks,
             notes: task.notes,
-            isImportant: task.isImportant
+            isImportant: task.isImportant,
+            recurrant: task.recurrant,
+            recurrantPeriod: goal.recurrantPeriod
         });
     });
 }

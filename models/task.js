@@ -15,10 +15,15 @@ const TaskSchema = new mongoose.Schema({
         type: String,
     },
     priority: {
-        type: Number,
+        type: String,
+        enum: ["High", "Medium", "Low"]
     },
     recurrant: {
         type: Boolean,
+    },
+    recurrantPeriod: {
+        type: String,
+        enum: ["Daily", "Weekly", "Monthly", "None"]
     },
     status: {
         type: String,
@@ -40,6 +45,16 @@ const TaskSchema = new mongoose.Schema({
     isImportant: {
         type: Boolean,
         required: true
+    },
+    invite:[
+        {
+            type: mongoose.Types.ObjectId,
+            ref: 'user'
+        }
+    ],
+    owner:{
+        type: mongoose.Types.ObjectId,
+        ref: 'user'
     }		
 },
 {

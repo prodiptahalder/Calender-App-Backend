@@ -29,7 +29,9 @@ exports.createGoal = (req,res) => {
             quote: goal.quote,
             background: goal.background,
             priority: goal.priority,
-            recurrant: goal.recurrant
+            recurrant: goal.recurrant,
+            recurrantPeriod: goal.recurrantPeriod,
+            invite: goal.invite
         });
     });
 }

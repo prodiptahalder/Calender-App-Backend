@@ -17,6 +17,12 @@ const GoalSchema = new mongoose.Schema({
         type: String,
         // required: true
     },
+    tasks:[
+        {
+            type: mongoose.Types.ObjectId,
+            ref: 'task'
+        }
+    ],
     background: {
         type: String,
         // required: true

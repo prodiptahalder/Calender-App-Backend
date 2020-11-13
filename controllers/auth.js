@@ -14,6 +14,7 @@ var expressJwt = require('express-jwt');
 
 //controlling auth routes in route folder
 exports.signup = (req,res)=>{
+    console.log(req.body)
     //validationResult binds errors with req
     const errors = validationResult(req);
 

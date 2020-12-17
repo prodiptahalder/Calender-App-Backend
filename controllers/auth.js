@@ -95,7 +95,7 @@ exports.signout = (req,res)=>{
 };
 
 //Google Signin
-exports.googleSignIn = (req,res)=>{
+exports.googleSignIn = async (req,res)=>{
     console.log("Body",req.body);
 
     //validationResult binds errors with req
@@ -140,7 +140,7 @@ exports.googleSignIn = (req,res)=>{
 }
 
 //Google Signup
-exports.googleSignUp = (req,res)=>{
+exports.googleSignUp = async (req,res)=>{
     console.log("Body",req.body);
 
     //validationResult binds errors with req
@@ -181,8 +181,8 @@ exports.googleSignUp = (req,res)=>{
             name: userName,
             googleVerified:true,
         }
-        const user = new User(authData);
-        user.save((err,user)=>{ //gives back two para, error and user
+        const newUser = new User(authData);
+        newUser.save((err,user)=>{ //gives back two para, error and user
             if(err){
                 return res.status(400).json({
                     //passing this json to craft a error mesg in front end

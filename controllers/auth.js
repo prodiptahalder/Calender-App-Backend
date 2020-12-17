@@ -7,6 +7,9 @@ const User = require('../models/user');
 const { check , validationResult } = require('express-validator');
 //check is not used here it is used in routes here we will use validation result
 
+//Importing OAuth Client for google authentication
+const {OAuth2Client} = require('google-auth-library')
+
 //bringing in jsonwebtoken express-jwt tokenize and save in cookie to authenticate user
 var jwt = require('jsonwebtoken');
 var expressJwt = require('express-jwt');
@@ -90,6 +93,110 @@ exports.signout = (req,res)=>{
         message: "User signout successfully"
     });
 };
+
+//Google Signin
+exports.googleSignIn = (req,res)=>{
+    console.log("Body",req.body);
+
+    //validationResult binds errors with req
+    const errors = validationResult(req);
+
+    if(!errors.isEmpty()){
+        //status 422 db error throw (Unprocessable Entity)
+        return res.status(422).json({
+            error: errors.array()[0].msg,
+        })
+    }
+
+    const idToken = req.body.idToken;
+    const client = new OAuth2Client(process.env.GCP_CLIENT_ID);
+    
+
+    const ticket = await client.verifyIdToken({
+        idToken:idToken,
+        audience:config.gcp.clientId,
+    });
+
+    const payload = ticket.getPayload();
+    const userEmail = payload['email'];
+    
+    User.findOne({email:userEmail},(err,user)=>{
+        // check for both the err and also if email doesnt exist then user doesnt exist
+        if(err || !user){ 
+            return res.status(400).json({
+                err:"User email does not exists"
+            });
+        }
+
+        //create token
+        const token = jwt.sign({_id:user._id}, process.env.SECRET);
+        //put token in cookie
+        res.cookie("token",token,{expire: new Date() + 9999});
+
+        //Send response to frontend
+        const {_id,name,email,role} = user;
+        return res.json({token,user:{_id,name,email,role}});
+    });
+}
+
+//Google Signup
+exports.googleSignUp = (req,res)=>{
+    console.log("Body",req.body);
+
+    //validationResult binds errors with req
+    const errors = validationResult(req);
+
+    if(!errors.isEmpty()){
+        //status 422 db error throw (Unprocessable Entity)
+        return res.status(422).json({
+            error: errors.array()[0].msg,
+        })
+    }
+
+    const idToken = req.body.idToken;
+    const client = new OAuth2Client(process.env.GCP_CLIENT_ID);
+    
+    const ticket = await client.verifyIdToken({
+        idToken:idToken,
+        audience:config.gcp.clientId,
+    });
+
+    const payload = ticket.getPayload();
+    const userEmail = payload['email'];
+    const userName = payload['name'];
+
+    //Finding if the user exists previously
+    User.findOne({email:userEmail},(err,user)=>{
+        // check for both the err and also if email doesnt exist then user doesnt exist
+        if(err || !user){ 
+            return res.status(400).json({
+                err:"User email does not exists"
+            });
+        }
+
+        //Creating new user
+
+        const authData = {
+            email: userEmail,
+            name: userName,
+            googleVerified:true,
+        }
+        const user = new User(authData);
+        user.save((err,user)=>{ //gives back two para, error and user
+            if(err){
+                return res.status(400).json({
+                    //passing this json to craft a error mesg in front end
+                    err: "Not able to save user in DB"
+                });
+            }
+            res.json({
+                name:user.name,
+                email:user.email,
+                id: user._id
+            });
+        });
+    })
+}
 
 //Protected Routes
 exports.isSignedIn = expressJwt({

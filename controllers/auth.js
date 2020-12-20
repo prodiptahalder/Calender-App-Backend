@@ -112,12 +112,13 @@ exports.googleSignIn = async (req,res)=>{
     }
 
     const idToken = req.body.idToken;
+    const device = req.body.device;
     const client = new OAuth2Client(process.env.GCP_CLIENT_ID);
     
 
     const ticket = await client.verifyIdToken({
         idToken:idToken,
-        audience:config.gcp.clientId,
+        audience: device=="android"? process.env.GCP_ANDROID_CLIENT_ID: process.env.GCP_IOS_CLIENT_ID
     });
 
     const payload = ticket.getPayload();
@@ -127,7 +128,7 @@ exports.googleSignIn = async (req,res)=>{
         // check for both the err and also if email doesnt exist then user doesnt exist
         if(err || !user){ 
             return res.status(400).json({
-                error:"User email does not exists",
+                error:"User email does not exists, Please signup first!",
                 type:"message"
             });
         }
@@ -158,11 +159,12 @@ exports.googleSignUp = async (req,res)=>{
     }
 
     const idToken = req.body.idToken;
+    const device = req.body.device;
     const client = new OAuth2Client(process.env.GCP_CLIENT_ID);
     
     const ticket = await client.verifyIdToken({
         idToken:idToken,
-        audience:config.gcp.clientId,
+        audience: device=="android"? process.env.GCP_ANDROID_CLIENT_ID: process.env.GCP_IOS_CLIENT_ID
     });
 
     const payload = ticket.getPayload();

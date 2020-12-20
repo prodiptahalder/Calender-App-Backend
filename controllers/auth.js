@@ -35,7 +35,7 @@ exports.signup = (req,res)=>{
         if(err){
             return res.status(400).json({
                 //passing this json to craft a error mesg in front end
-                err: "Not able to save user in DB"
+                error: "Not able to save user in DB"
             });
         }
         res.json({
@@ -64,7 +64,7 @@ exports.signin = (req,res)=>{
         // check for both the err and also if email doesnt exist then user doesnt exist
         if(err || !user){ 
             return res.status(400).json({
-                err:"User email does not exists"
+                error:"User email does not exists"
             });
         }
 
@@ -124,7 +124,7 @@ exports.googleSignIn = async (req,res)=>{
         // check for both the err and also if email doesnt exist then user doesnt exist
         if(err || !user){ 
             return res.status(400).json({
-                err:"User email does not exists"
+                error:"User email does not exists"
             });
         }
 
@@ -170,7 +170,7 @@ exports.googleSignUp = async (req,res)=>{
         // check for both the err and also if email doesnt exist then user doesnt exist
         if(err || !user){ 
             return res.status(400).json({
-                err:"User email does not exists"
+                error:"User email does not exists"
             });
         }
 
@@ -186,7 +186,7 @@ exports.googleSignUp = async (req,res)=>{
             if(err){
                 return res.status(400).json({
                     //passing this json to craft a error mesg in front end
-                    err: "Not able to save user in DB"
+                    error: "Not able to save user in DB"
                 });
             }
             res.json({

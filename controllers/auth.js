@@ -24,8 +24,8 @@ exports.signup = (req,res)=>{
     if(!errors.isEmpty()){
         //status 422 db error throw (Unprocessable Entity)
         return res.status(422).json({
-            error: errors.array()[0].msg,
-            param: errors.array()[0].param
+            error: errors.array(),
+            type:"params"
         })
     }
 
@@ -35,7 +35,8 @@ exports.signup = (req,res)=>{
         if(err){
             return res.status(400).json({
                 //passing this json to craft a error mesg in front end
-                error: "Not able to save user in DB"
+                error: "Not able to save user in DB",
+                type:"message"
             });
         }
         res.json({
@@ -55,8 +56,8 @@ exports.signin = (req,res)=>{
     if(!errors.isEmpty()){
         //status 422 db error throw (Unprocessable Entity)
         return res.status(422).json({
-            error: errors.array()[0].msg,
-            param: errors.array()[0].param
+            error: errors.array(),
+            type: "params"
         });
     }
 
@@ -64,7 +65,8 @@ exports.signin = (req,res)=>{
         // check for both the err and also if email doesnt exist then user doesnt exist
         if(err || !user){ 
             return res.status(400).json({
-                error:"User email does not exists"
+                error:"User email does not exists",
+                type:"message"
             });
         }
 
@@ -105,6 +107,7 @@ exports.googleSignIn = async (req,res)=>{
         //status 422 db error throw (Unprocessable Entity)
         return res.status(422).json({
             error: errors.array()[0].msg,
+            type:"message",
         })
     }
 
@@ -124,7 +127,8 @@ exports.googleSignIn = async (req,res)=>{
         // check for both the err and also if email doesnt exist then user doesnt exist
         if(err || !user){ 
             return res.status(400).json({
-                error:"User email does not exists"
+                error:"User email does not exists",
+                type:"message"
             });
         }
 
@@ -170,7 +174,8 @@ exports.googleSignUp = async (req,res)=>{
         // check for both the err and also if email doesnt exist then user doesnt exist
         if(err || !user){ 
             return res.status(400).json({
-                error:"User email does not exists"
+                error:"User email does not exists",
+                type:"message"
             });
         }
 
@@ -186,7 +191,8 @@ exports.googleSignUp = async (req,res)=>{
             if(err){
                 return res.status(400).json({
                     //passing this json to craft a error mesg in front end
-                    error: "Not able to save user in DB"
+                    error: "Not able to save user in DB",
+                    type:"message"
                 });
             }
             res.json({

@@ -172,11 +172,11 @@ exports.googleSignUp = async (req,res)=>{
     const userName = payload['name'];
 
     //Finding if the user exists previously
-    User.findOne({email:userEmail},(err,user)=>{
+    User.findOne({$and:[{email:userEmail},{googleVerified:true}]},(err,user)=>{
         // check for both the err and also if email doesnt exist then user doesnt exist
-        if(err || !user){ 
+        if(user){ 
             return res.status(400).json({
-                error:"User email does not exists",
+                error:"User email already exists!",
                 type:"message"
             });
         }
@@ -191,6 +191,7 @@ exports.googleSignUp = async (req,res)=>{
         const newUser = new User(authData);
         newUser.save((err,user)=>{ //gives back two para, error and user
             if(err){
+                console.log("Error",err);
                 return res.status(400).json({
                     //passing this json to craft a error mesg in front end
                     error: "Not able to save user in DB",

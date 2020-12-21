@@ -68,7 +68,6 @@ const userSchema = new mongoose.Schema({
     //Todo Come back here
     encry_password:{
         type: String,
-        required: true,
     },
     //Salt for Passwords
     salt: String, //defined in virtuals

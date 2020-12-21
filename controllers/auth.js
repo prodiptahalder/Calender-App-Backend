@@ -124,7 +124,7 @@ exports.googleSignIn = async (req,res)=>{
     const payload = ticket.getPayload();
     const userEmail = payload['email'];
     
-    User.findOne({email:userEmail},(err,user)=>{
+    User.findOne({$and:[{email:userEmail},{googleVerified:true}]},(err,user)=>{
         // check for both the err and also if email doesnt exist then user doesnt exist
         if(err || !user){ 
             return res.status(400).json({
